@@ -1,0 +1,150 @@
+<!--pages/store/category/category.wxml-->
+<view class='page'>
+    <!-- content -->
+    <view class='content'>
+        <!--left menu -->
+        <scroll-view class="menuList pull-left" scroll-y scroll-with-animation='true' style='height:{{deviceHeight}}px' upper-threshold="100" lower-threshold="100" scroll-top='{{menuOffset}}'>
+            <view class='logo'><image class='img' src='../../../resource/img/banner.png'></image></view>
+            <view bindtap='toggleMenu' data-cur-index='{{index}}' class='item {{index == currentIndex ? "active" :""}}' wx:for="{{storeInfo.listOfCategory}}" wx:for-item="item" wx:for-index='index'>
+                <text class='name'><text class='icon'></text>{{item.name}}</text>
+            </view>
+            <view class='footer-offset'></view>
+        </scroll-view>
+
+        <!-- detail list -->
+        <scroll-view id='detailPage' class='detail pull-right' scroll-y scroll-with-animation style='height:{{deviceHeight}}px' scroll-into-view="{{scrollView}}" bindscroll='scrollPage'>
+            <view class='detail_view_item' wx:for="{{storeInfo.listOfCategory}}" wx:for-item='item' wx:for-index="index" id="proDetail{{index}}" data-index="{{index}}">
+                <view class='top'>
+                    <text class='title'>{{item.name}}</text>
+                    <text class='subTitle'>新鲜爽口,好喝的不得了!</text>
+                </view>
+                <template is='proItem' wx:for='{{item.listOfProduct}}' wx:for-item='detailItem' wx:for-index="detailIndex" data='{{detailItem,shoppingCar,detailIndex,item}}'/>
+            </view>
+            <view class='footer-offset'></view>
+        </scroll-view>
+    </view>
+    <!-- fotter -->
+    <view class='footer clearFix'id='footer'>
+        <view class='left pull-left'>
+            <view id='carBtn' class='menu pull-left' bindtap='showShoppingCar'>
+                <view class='menuIcon'>
+                    <image class="logo" src="../../../resource/img/banner.png"></image>
+                </view>
+                <text class='count'>40</text>
+            </view>
+
+            <view class='pull-left tip'>
+                <text class='item' style='display:none;'>未选购商品!</text>
+                <text class='item price' >￥32</text>
+            </view>
+        </view>           
+        <view class='right pull-right'>
+            <text class='item' style='display:none;'>立即起送</text>
+            <text class='item payBtn'bindtap='settlement'>去结算</text>
+        </view>
+        
+    </view>
+    <!-- add goods modal -->
+    <view class='modal' hidden='{{isModalHide}}'>
+        <view class='content'>
+            <view class='modal-body'>
+                <view class='clearFix btn-close'>
+                    <text class='icon icon-close btn' bindtap='closeModal'></text>
+                </view>
+                <view class='title'>
+                    <text>芒果奶茶店</text>
+                </view>
+                <view class='standard'>
+                    <view class='classify'>
+                        <text class='type'>规格</text>
+                        <view class='list'>
+                            <text class='item active'>大份500g(去皮)</text>
+                            <text class='item'>中份300g(去皮)</text>
+                            <text class='item'>小份200g(去皮)</text>
+                        </view>
+                    </view>
+                    <view class='classify'>
+                        <text class='type'>规格</text>
+                        <view class='list'>
+                            <text class='item active'>大份500g(去皮)</text>
+                            <text class='item'>中份300g(去皮)</text>
+                            <text class='item'>小份200g(去皮)</text>
+                        </view>
+                    </view>
+                </view>
+                <view class='bottom'>
+                    <text class='price'>￥36</text>
+                    <text class='sure'>选好了</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <!-- shopping car -->
+    <view id='carModal' class='shopping_car {{showCarModal == true?"showMadal":""}}' bindtap='showShoppingCar'>
+        <view class='car_box {{showCarModal == true?"show":""}}'>
+            <view class='tip'>
+                <text>积分多多,优惠多多!</text>
+            </view>
+            <view   class='init_height'>
+                <view class='title'>
+                    <text class='pull-left txt'>已选商品</text>
+                    <view class='clear' catch:tap='clearCar' hover-class='active'>
+                        <text class='icon icon-clear'> 清空</text>
+                    </view>
+                </view>
+                <scroll-view class='shopping_list'  scroll-y style='max-height:700rpx;background:#fff;'>
+                    <view class='clearFix com' wx:for='{{shoppingCar.data}}'wx:for-index='index' wx:for-item='item'>
+                        <view class='price pull-left'>
+                            <view class='name pull-left'>
+                                <view>{{item.name}}</view>
+                                <text class='sub_dis'>规格文字描述</text>
+                            </view>
+                            <text class='current pull-right'><text class='unit'>￥</text>{{item.saleprice}}</text>
+                        </view>
+                        <view class='pull-right countBox'>
+                            <button class='btn add' catch:tap='countAdd' data-index='{{index}}'>+</button>
+                            <text class='num'wx:if='{{shoppingCar.data[detailIndex].count > 0 }}'>{{item.count}}</text>
+                            <button class='btn reduce {{shoppingCar.data[detailIndex].count > 0 ? "animate":""}}' catch:tap='countReduce' data-index='{{index}}'>-</button>
+                        </view>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<!-- 定义模板 -->
+<!-- template.wxml -->
+<!--标题:item.name
+    name,price,saleprice,sales
+-->
+<template name='proItem'>
+    <view>
+        <view catchtap='navigateChange' class='clearFix proItem'>
+            <image class='pull-left proImg' src='../../../resource/img/banner.png'></image>
+            <view class='pull-right proNotes'>
+                <view class='title'>{{detailItem.name}}</view>
+                <view class='sales'>月销量:{{detailItem.sales}}份</view>
+                <!--
+                <text class='disCount'>
+                    <text class='dis'>4.2折</text>
+                    <text class='limit'>每单仅限一份优惠</text>
+                </text>
+                -->
+                <view class='clearFix com'>
+                    <text class='price pull-left'>
+                        <text class='current'><text class='unit'>￥</text>{{detailItem.saleprice}}</text>
+                        <text class='original'>￥{{detailItem.price}}</text>
+                    </text>
+                    <view class='pull-right countBox'>
+                        <button class='btn add' capture-catch:tap='countAdd' data-index='{{detailIndex}}'>+</button>
+                        <!--<text class='num'wx:if='{{shoppingCar.data[detailIndex].count > 0 }}'>{{shoppingCar.data[detailIndex].count}}</text>-->
+                        <text class='num'wx:if='{{shoppingCar.data[detailIndex].count > 0 }}'>{{shoppingCar.data[detailIndex].count}}</text>
+                        <button class='btn reduce {{shoppingCar.data[detailIndex].count > 0 ? "animate":""}}' capture-catch:tap='countReduce' data-index='{{detailIndex}}'>-</button>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</template >

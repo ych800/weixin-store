@@ -1,0 +1,47 @@
+<!--pages/store/info/index.wxml-->
+<view class="page">
+    <!-- store img and information-->
+    <view class="storeInfo">
+       <image class="bgImg" src="{{storeInfo.image}}"></image>
+        <view  class="info">
+            <view class="logo">
+                <image class="logoImg" src='{{storeInfo.logo}}'></image>
+                <text class="name">{{storeInfo.name}}</text>
+            </view>
+            <text class="phone">电话: {{storeInfo.phone}}</text>
+            <text class="addr">地址: {{storeInfo.province + storeInfo.city + storeInfo.address}}</text>
+        </view>
+    </view>
+    <!--order button -->
+    <navigator url='../category/category?id={{storeInfo.id}}&customerId={{storeInfo.customerId}}&name={{storeInfo.name}}' open-type='navigate' class="orderBtn" hover-class='order-btn-hover'>立即点单</navigator>
+    <!-- toggle list -->
+    <view class="subToggle">
+        <!-- 优惠券 -->
+        <navigator url='../coupon/coupon?id={{storeInfo.id}}&customerId={{storeInfo.customerId}}&name={{storeInfo.name}}' open-type='navigate' class='item' hover-class='toggleActive'>
+            <image src='../../../resource/img/banner.png'></image>
+            <text class='name'>优惠券</text>
+            <text class="toggleIcon">
+                <text class="more">更多优惠</text>
+                <text class='icon icon-arrow-right'></text>
+            </text>
+        </navigator>
+        <!-- 预约排队 -->
+        <navigator url='../appointment/appointment?id={{storeInfo.id}}&customerId={{storeInfo.customerId}}&name={{storeInfo.name}}' open-type='navigate' class='item' hover-class='toggleActive'>
+            <image src='../../../resource/img/banner.png'></image>
+            <text class='name'>预约排队</text>
+            <text class="toggleIcon">
+                <text class="more">立即预约</text>
+                <text class='icon icon-arrow-right'></text>
+            </text>
+        </navigator>
+        <!-- 我的订单 -->
+        <navigator url='../myOrder/myOrder?id={{storeInfo.id}}&customerId={{storeInfo.customerId}}&name={{storeInfo.name}}' open-type='navigate' class='item' hover-class='toggleActive'>
+            <image src='../../../resource/img/banner.png'></image>
+            <text class='name'>我的订单</text>
+            <text class="toggleIcon">
+                <text class="more">查看点单</text>
+                <text class='icon icon-arrow-right'></text>
+            </text>
+        </navigator>
+    </view>
+</view>
